@@ -1,8 +1,3 @@
-# ThreeJS Vite Vanilla Starter
+# ThreeJS Experiments
 
-Personal framework by [Prince Wilson](https://twitter.com/maxcell)
-for getting started with ThreeJS as an alternative to Webpack.
-
-This will only run through with Vanilla JS at the moment. If you're
-looking to integrate with other client side frameworks check out
-[Vite - Plugins](https://vitejs.dev/plugins/#official-plugins).
+This will be accrued code over time while going through the [ThreeJS Journey course](https://threejs-journey.com/). I am using a branching strategy to go through and play around with the lessons. So you can switch to a branch and then run them with `npm run dev`.
