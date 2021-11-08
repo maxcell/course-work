@@ -48,4 +48,22 @@ const renderer = new THREE.WebGLRenderer({
 
 renderer.setSize(sizes.width, sizes.height)
 
-renderer.render(scene, camera) 
+// Animations
+function loop() {
+  console.log('tick')
+
+  // Updating objects
+  
+  cube.scale.x += 0.05
+  cube.position.z -= 0.1
+  cube.rotation.y += 0.1
+
+  // Rendering
+  renderer.render(scene, camera)
+
+  // This is will call every frame
+  window.requestAnimationFrame(loop)
+}
+
+// One invocation to kick off the recursion
+loop()
