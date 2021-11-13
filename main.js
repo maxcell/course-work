@@ -3,15 +3,19 @@ import * as THREE from 'three';
 const scene = new THREE.Scene();
 
 const sizes = {
-  width: 600,
-  height: 800
+  width: 800,
+  height: 600
 }
 
-const camera = new THREE.PerspectiveCamera(
-  45, // FOV
-  sizes.width / sizes.height,
-  0.1,
-  1000
+// const camera = new THREE.PerspectiveCamera(
+//   75, // FOV
+//   sizes.width / sizes.height,
+//   0.1,
+//   100
+// )
+const aspectRatio = sizes.width / sizes.height
+const camera = new THREE.OrthographicCamera(
+  -1 * aspectRatio, 1 * aspectRatio, 1, -1, 0.1, 1000
 )
 
 const geometry = new THREE.BoxGeometry(1, 1, 1)
@@ -21,7 +25,6 @@ const mesh = new THREE.MeshBasicMaterial({
 
 const cube = new THREE.Mesh(geometry, mesh)
 camera.position.z = 10
-cube.position.set(1, -0.6, 3)
 
 scene.add(cube)
 
@@ -33,4 +36,14 @@ const renderer = new THREE.WebGLRenderer({
 
 renderer.setSize(sizes.width, sizes.height)
 
-renderer.render(scene, camera) 
+let clock = new THREE.Clock()
+function loop() {
+  camera.position.x = Math.cos(clock.getElapsedTime()) * Math.PI
+  camera.position.y = Math.sin(clock.getElapsedTime()) * Math.PI
+  camera.lookAt(cube.position)
+  renderer.render(scene, camera)
+  window.requestAnimationFrame(loop)
+}
+
+loop()
+
