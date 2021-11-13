@@ -1,11 +1,25 @@
 import * as THREE from 'three';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 
 const scene = new THREE.Scene();
+const domElement = document.getElementById('canvas')
 
 const sizes = {
-  width: 600,
-  height: 800
+  width: window.innerWidth,
+  height: window.innerHeight
 }
+
+window.addEventListener('resize', (event) => {
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  camera.aspect = sizes.width / sizes.height
+  camera.updateProjectionMatrix()
+
+  renderer.setSize(sizes.width, sizes.height)
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+})
 
 const camera = new THREE.PerspectiveCamera(
   45, // FOV
@@ -14,38 +28,66 @@ const camera = new THREE.PerspectiveCamera(
   1000
 )
 
-const geometry = new THREE.BoxGeometry(1, 1, 1)
-const mesh = new THREE.MeshBasicMaterial({
-  color: 'red'
-})
+const polyGroup = []
+for(let i = 0; i < 5; i++) {
+  const geometry = new THREE.IcosahedronGeometry(1, 0)
+  // const geometry = new THREE.TorusKnotGeometry(12, 1, 100, 16)
+  const mesh = new THREE.MeshNormalMaterial({
+  })
+  //const mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(), new THREE.MeshBasicMaterial({map: tex}));
+  // const mesh = new THREE.MeshBasicMaterial({
+  //   color: 'goldenrod',
+  //   wireframe: true
+  // })
 
-const cube = new THREE.Mesh(geometry, mesh)
-camera.position.z = 10
-cube.position.set(1, -0.6, 3)
-cube.scale.set(2, 0.5, 0.5)
+  const polyhedron = new THREE.Mesh(geometry, mesh)
+  polyhedron.position.set(3 * i - 3, 0, 0)
 
-cube.rotation.y = 1
 
-// Look into Gimbal Lock
-// To avoid this is, you need to use reorder
-// Apply the reorder prior to any rotation
-scene.add(cube)
 
-const axesHelper = new THREE.AxesHelper(3)
-scene.add(axesHelper)
-// Camera's position is actually a vector
-// Distance between scene center and object is length
-// Distance between object and camera is distanceTo
-// camera.position.x = 0.7
-// camera.position.y = -0.5
-// camera.position.z = 5
+  polyGroup.push(polyhedron)
+  scene.add(polyhedron)
+}
+
+
+
+// const geometry = new THREE.DodecahedronGeometry(1, 0)
+// // const geometry = new THREE.TorusKnotGeometry(12, 1, 100, 16)
+// const mesh = new THREE.MeshBasicMaterial({
+//   color: 'goldenrod',
+//   wireframe: true
+// })
+
+// const cube = new THREE.Mesh(geometry, mesh)
+camera.position.z = 20
+
+// scene.add(cube)
+
 
 // Vectors can be manually changed around as well
 scene.add(camera)
+
+const controls = new OrbitControls(camera, domElement)
+controls.enableDamping = true
+
 const renderer = new THREE.WebGLRenderer({
-  canvas: document.getElementById('canvas')
+  canvas: domElement
 })
 
 renderer.setSize(sizes.width, sizes.height)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-renderer.render(scene, camera) 
+const clock = new THREE.Clock()
+function loop() {
+  polyGroup.forEach((element, index)=> {
+      element.rotation.x =  Math.sin(clock.getElapsedTime()) * (index % 2 == 0 ? -1 : 1) * Math.PI
+      element.rotation.z =  Math.cos(clock.getElapsedTime()) * 1 * Math.PI
+    }
+  )
+
+  controls.update()
+  renderer.render(scene, camera)
+  window.requestAnimationFrame(loop)
+}
+
+loop()
