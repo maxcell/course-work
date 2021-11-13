@@ -14,14 +14,15 @@ const camera = new THREE.PerspectiveCamera(
   1000
 )
 
-const geometry = new THREE.BoxGeometry(1, 1, 1)
+const geometry = new THREE.TorusGeometry(1, 0.15, Math.PI * 100, 45);
+// const geometry = new THREE.BoxGeometry(1, 1, 1)
 const material = new THREE.MeshBasicMaterial({
-  color: 'tomato'
+  color: 'goldenrod'
 })
 
 const cube = new THREE.Mesh(geometry, material)
 camera.position.z = 10
-cube.position.set(1, -0.6, 3)
+cube.position.set(0, 0, 3)
 
 cube.rotation.y = 1
 
@@ -41,12 +42,14 @@ renderer.setSize(sizes.width, sizes.height)
 let clock = new THREE.Clock()
 function loop() {
   let elapsedTime = clock.getElapsedTime()
-  console.log(Math.sin(elapsedTime))
-  cube.rotation.z = Math.sin(elapsedTime)
-  cube.rotation.y = Math.cos(elapsedTime)
-
-  cube.position.x = Math.sin(elapsedTime)
-  cube.position.y = Math.cos(elapsedTime)
+ // console.log(Math.sin(elapsedTime))
+  // cube.rotation.z = Math.sin(elapsedTime)
+  //cube.rotation.y = elapsedTime * -Math.PI//Math.cos(elapsedTime)
+  
+  //cube.position.z = Math.sin(elapsedTime)
+  cube.rotation.y = elapsedTime * Math.PI
+  // cube.position.x = Math.sin(elapsedTime)
+  // cube.position.y = Math.cos(elapsedTime)
   window.requestAnimationFrame(loop)
   renderer.render(scene, camera)
 }
