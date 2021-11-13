@@ -22,23 +22,8 @@ const mesh = new THREE.MeshBasicMaterial({
 const cube = new THREE.Mesh(geometry, mesh)
 camera.position.z = 10
 cube.position.set(1, -0.6, 3)
-cube.scale.set(2, 0.5, 0.5)
 
-cube.rotation.y = 1
-
-// Look into Gimbal Lock
-// To avoid this is, you need to use reorder
-// Apply the reorder prior to any rotation
 scene.add(cube)
-
-const axesHelper = new THREE.AxesHelper(3)
-scene.add(axesHelper)
-// Camera's position is actually a vector
-// Distance between scene center and object is length
-// Distance between object and camera is distanceTo
-// camera.position.x = 0.7
-// camera.position.y = -0.5
-// camera.position.z = 5
 
 // Vectors can be manually changed around as well
 scene.add(camera)
